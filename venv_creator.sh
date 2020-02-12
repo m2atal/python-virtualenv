@@ -13,18 +13,35 @@ spinner () {
 
 }
 
+install () {
+    pip install --user $1 > /dev/null &
+    pid=$!
+    spinner $pid "Installing $1" 
+}
+
 echo "-=-=- Virtual Env Creator -=-=-"
 
 #################### Required package
 # virtualenv jupyter ipykernel
 
-for val in numpy ; do
+for val in virtualenv jupyter ; do
  	if pip show $val > /dev/null ; then
         echo [✔︎] $val found.
     else
-        exit 1
+        echo [✘] $val not found.
+
+        while true; do
+            read -p "Do you wish to install $val package ? (Y/n)" yn
+            yn=${yn:-Y}
+            case $yn in
+                [Yy]* ) install $val; break;;
+                [Nn]* ) exit;;
+                * ) echo "Please answer yes or no.";
+            esac
+        done
     fi
 done
+
 
 
 #################### Retrieve python version 
