@@ -17,6 +17,9 @@ install () {
     pip install --user $1 > /dev/null &
     pid=$!
     spinner $pid "Installing $1" 
+
+    printf "\e[2K \r"
+    echo "[✔︎] $1 installed"
 }
 
 echo "-=-=- Virtual Env Creator -=-=-"
